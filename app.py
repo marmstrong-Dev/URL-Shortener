@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask
 import json
 import os.path
 import routes
@@ -6,10 +6,11 @@ import routes
 app = Flask(__name__, static_folder='public')
 app.secret_key = '#43fivikx'
 
-#Routes
+# Routes
 app.add_url_rule('/', view_func=routes.home)
 app.add_url_rule('/product', view_func=routes.product)
-
+app.add_url_rule('/product/addurl', view_func=routes.addurl, methods=['POST'])
+app.add_url_rule('/product/delurl', view_func=routes.delurl, methods=['POST'])
 
 #@app.route('/product', methods=['GET', 'POST'])
 #def product():
