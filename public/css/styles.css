@@ -1,0 +1,12 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#resultsCard {
+    position: relative;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 12px;
+    width: 320px;
+}

@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block title %}Results Page{% endblock %}
+{% block content %}
+<div class="card" id="resultsCard">
+    <div class="card-header">
+        <h3 class="mx-auto">Your Code Is Registered</h3>
+    </div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Long URL: {{ long }}</li>
+            <li class="list-group-item">Shortened URL: {{ short }}</li>
+        </ul>
+    </div>
+    <div class="card-footer">
+        <a href="/">Return to Dashboard</a>
+    </div>
+</div>
+{% endblock %}
