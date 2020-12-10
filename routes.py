@@ -24,7 +24,7 @@ def addurl():
         return redirect(url_for('home'))
     else:
         candidate.add_url()
-        return render_template('product.html', short=candidate.short, long=candidate.long)
+        return render_template('product.html', is_del=False, product_banner='Product Registered', short=candidate.short, long=candidate.long)
 
 
 def delurl():
@@ -32,6 +32,6 @@ def delurl():
 
     if candidate.check_exists:
         candidate.del_url()
-        return redirect(url_for('home'))
+        return render_template('product.html', is_del=True, product_banner='Product Deleted', short=candidate.short)
     else:
         return redirect(url_for('home'))
