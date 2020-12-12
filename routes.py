@@ -1,37 +1,48 @@
-from flask import render_template, request, redirect, url_for
-from data import single_execute, lookup_execute, ShortenedURL
+from flask import render_template, request, redirect, url_for, make_response
+from auth import RegUser
+from data import ShortenedURL
+
+
+def register():
+    new_user = RegUser(request.form['email'], request.form['password'])
+    new_user.create_user()
+    return redirect(url_for('home'))
+
+
+def login():
+    if request.form['email'] is None or request.form['password'] is None:
+        return redirect(url_for('home'))
+    else:
+        logged_user = RegUser(request.form['email'], request.form['password'])
+        logged_user.login_user()
+
+        if logged_user.id > 0:
+            resp = make_response(redirect(url_for('dashboard')))
+            resp.set_cookie('userEmail', logged_user.email)
+            return resp
+        else:
+            return redirect(url_for('home'))
+
+
+def logout():
+    return redirect(url_for('home'))
 
 
 def home():
-    init_tables = 'CREATE TABLE IF NOT EXISTS urls (urlID INTEGER PRIMARY KEY AUTOINCREMENT, long TEXT, short TEXT);'
-    single_execute(init_tables)
-
-    lookup_query = 'SELECT long, short FROM urls;'
-    urls_list = lookup_execute(lookup_query)
-
-    print(urls_list)
-    return render_template('index.html', urls=urls_list)
+    return render_template('auth.html', auth_message='Sign In', action_route='auth/login')
 
 
-def product(shorturl, longurl):
-    return render_template('product.html', short=shorturl, long=longurl)
+def registration():
+    return render_template('auth.html', auth_message='Sign Up', action_route='auth/register')
+
+
+def dashboard():
+    return render_template('dashboard.html', user_email=request.cookies.get('userEmail'))
 
 
 def addurl():
-    candidate = ShortenedURL(request.form['long'], request.form['short'])
-
-    if candidate.long is None and candidate.short is None:
-        return redirect(url_for('home'))
-    else:
-        candidate.add_url()
-        return render_template('product.html', is_del=False, product_banner='Product Registered', short=candidate.short, long=candidate.long)
+    add_candidate = ShortenedURL(request.form['long'], request.form['short'])
 
 
 def delurl():
-    candidate = ShortenedURL(request.form['long'], request.form['short'])
-
-    if candidate.check_exists:
-        candidate.del_url()
-        return render_template('product.html', is_del=True, product_banner='Product Deleted', short=candidate.short)
-    else:
-        return redirect(url_for('home'))
+    del_candidate = ShortenedURL(request.form['long'], request.form['short'])
