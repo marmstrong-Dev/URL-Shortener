@@ -8,13 +8,13 @@
     <div class="card-body">
         <ul class="list-group list-group-flush">
             {% if is_del == False %}
-            <li class="list-group-item">Long URL: {{ long }}</li>
+            <li class="list-group-item">Long URL: {{ candidate.long }}</li>
             {% endif %}
-            <li class="list-group-item">Shortened URL: {{ short }}</li>
+            <li class="list-group-item">Shortened URL: {{ candidate.short }}</li>
         </ul>
     </div>
     <div class="card-footer">
-        <a href="/">Return to Dashboard</a>
+        <a href="/dashboard">Return to Dashboard</a>
     </div>
 </div>
 {% endblock %}

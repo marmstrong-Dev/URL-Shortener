@@ -6,6 +6,7 @@
         <div class="card-header">
             <h2>URL Shortener</h2>
             <p>Welcome: {{ user_email }}</p>
+            <a href="/" class="float-right">Logout</a>
         </div>
         <form action="product/addurl" method="POST">
             <div class="card-body">
@@ -28,19 +29,17 @@
             <thead>
                 <tr>
                     <th>Shortened URL: </th>
-                    <th>Long URL: </th>
                     <th>Delete: </th>
                 </tr>
             </thead>
             <tbody>
                 {% for url in urls %}
                 <tr>
-                    <td>{{ url.short }}</td>
-                    <td>{{ url.long }}</td>
+                    <td><a href="http://{{ url['long'] }}">{{ url['short'] }}</a></td>
                     <td>
                         <form method="POST" action="product/delurl">
-                            <input type="hidden" name="long" value="{{ url.long }}">
-                            <input type="hidden" name="short" value="{{ url.short }}">
+                            <input type="hidden" name="long" value="{{ url['long'] }}">
+                            <input type="hidden" name="short" value="{{ url['short'] }}">
                             <button type="submit" class="btn btn-primary">Delete</button>
                         </form>
                     </td>
