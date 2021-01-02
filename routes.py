@@ -6,12 +6,17 @@ from data import ShortenedURL, get_urls
 user_info = {}
 
 
+# Form Submission Route For New Registration
 def register():
-    new_user = RegUser(request.form['email'], request.form['password'])
-    new_user.create_user()
-    return redirect(url_for('home'))
+    if request.form['password'] == request.form['cpassword']:
+        new_user = RegUser(request.form['email'], request.form['password'])
+        new_user.create_user()
+        return redirect(url_for('home'))
+    else:
+        return redirect(url_for('registration'))
 
 
+# Form Submission Route For Login
 def login():
     if request.form['email'] is None or request.form['password'] is None:
         return redirect(url_for('home'))
@@ -31,6 +36,7 @@ def login():
             return redirect(url_for('home'))
 
 
+# Home Page Render
 def home():
     try:
         user_info.pop('userID')
@@ -41,18 +47,21 @@ def home():
     return render_template('auth.html', auth_message='Sign In', action_route='auth/login')
 
 
+# Registration Page Render
 def registration():
-    return render_template('auth.html', auth_message='Sign Up', action_route='auth/register')
+    return render_template('auth.html', auth_message='New User', action_route='auth/register')
 
 
+# Main Dashboard Render
 def dashboard():
-    if request.cookies.get('userEmail'):
+    if user_info:
         urls = get_urls(user_info['userID'])
         return render_template('dashboard.html', user_email=user_info['userEmail'], urls=urls)
     else:
         return redirect(url_for('home'))
 
 
+# Add Shortened URL Route
 def addurl():
     add_candidate = ShortenedURL(request.form['long'], request.form['short'])
     add_candidate.creator = user_info['userID']
@@ -61,6 +70,7 @@ def addurl():
     return render_template('product.html', product_banner='Successfully Added URL', is_del=False, candidate=add_candidate)
 
 
+# Delete Existing URL Route
 def delurl():
     del_candidate = ShortenedURL(request.form['long'], request.form['short'])
     del_candidate.del_url()

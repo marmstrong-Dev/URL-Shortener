@@ -1,6 +1,5 @@
 from flask import Flask
 from dbcon import DbCon
-import os.path
 import routes
 
 

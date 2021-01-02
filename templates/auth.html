@@ -1,11 +1,14 @@
 {% extends 'layout.html' %}
 {% block title %}Login{% endblock %}
 {% block content %}
-<div class="card" id="authForm">
+<div class="card mx-auto" id="authForm">
     <div class="card-header">
-        <h3>{{ auth_message }}</h3>
+        <h3 id="auth_message">{{ auth_message }}</h3>
+        <div class="alert alert-danger text-center" id="errorMsg">
+            <strong>Passwords Do Not Match</strong>
+        </div>
     </div>
-    <form action="{{ action_route }}" method="POST">
+    <form action="{{ action_route }}" method="POST" onsubmit="return(regValidation())">
         <div class="card-body">
             <div class="form-group">
                 <input class="form-control" type="email" id="email" name="email" required>
@@ -15,10 +18,16 @@
                 <input class="form-control" type="password" id="password" name="password" required>
                 <label for="password">Password:</label>
             </div>
+            {% if auth_message == 'New User' %}
+            <div>
+                <input class="form-control" type="password" id="cpassword" name="cpassword" required>
+                <label for="cpassword">Confirm Password:</label>
+            </div>
+            {% endif %}
         </div>
         <div class="card-footer">
             {% if auth_message == 'Sign In' %}
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-primary">Login</button><br/>
             <a href="signup">New User? Sign Up Now</a>
             {% else %}
             <button type="submit" class="btn btn-primary">Register</button>

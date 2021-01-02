@@ -11,11 +11,14 @@ class RegUser:
         self.password = password
 
     def create_user(self):
-        self.password = generate_password_hash(self.password, method='sha256')
-        register_query = f"INSERT INTO users (email, password) VALUES ('{ self.email }', '{ self.password }');"
+        if self.email and self.password:
+            self.password = generate_password_hash(self.password, method='sha256')
+            register_query = f"INSERT INTO users (email, password) VALUES ('{ self.email }', '{ self.password }');"
 
-        register_con = DbCon(register_query)
-        register_con.single_execute()
+            register_con = DbCon(register_query)
+            register_con.single_execute()
+        else:
+            return
 
     def login_user(self):
         login_query = f"SELECT userID, password FROM users WHERE email = '{ self.email }';"
