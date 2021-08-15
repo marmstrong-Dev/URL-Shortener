@@ -2,8 +2,8 @@ import sqlite3
 from sqlite3 import Error
 
 
-class DbCon:
-    def __init__(self, query):
+class DBCon:
+    def __init__(self, query: str):
         self.dataFile = 'urls.db'
         self.query = query
 

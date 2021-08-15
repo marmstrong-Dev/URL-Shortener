@@ -1,19 +1,20 @@
 from flask import render_template, request, redirect, url_for, make_response
-from auth import RegUser
-from data import ShortenedURL, get_urls
+from .authenticator import RegUser
+from .urldata import ShortenedURL, get_urls
 
 
 user_info = {}
 
 
-# Form Submission Route For New Registration
-def register():
-    if request.form['password'] == request.form['cpassword']:
-        new_user = RegUser(request.form['email'], request.form['password'])
-        new_user.create_user()
-        return redirect(url_for('home'))
-    else:
-        return redirect(url_for('registration'))
+# Home Page Render
+def home():
+    try:
+        user_info.pop('userID')
+        user_info.pop('userEmail')
+    except:
+        print('New Login')
+
+    return render_template('auth.html', auth_message='Sign In', action_route='auth/login')
 
 
 # Form Submission Route For Login
@@ -36,20 +37,19 @@ def login():
             return redirect(url_for('home'))
 
 
-# Home Page Render
-def home():
-    try:
-        user_info.pop('userID')
-        user_info.pop('userEmail')
-    except:
-        print('New Login')
-
-    return render_template('auth.html', auth_message='Sign In', action_route='auth/login')
-
-
 # Registration Page Render
 def registration():
     return render_template('auth.html', auth_message='New User', action_route='auth/register')
+
+
+# Form Submission Route For New Registration
+def register():
+    if request.form['password'] == request.form['cpassword']:
+        new_user = RegUser(request.form['email'], request.form['password'])
+        new_user.create_user()
+        return redirect(url_for('home'))
+    else:
+        return redirect(url_for('registration'))
 
 
 # Main Dashboard Render
